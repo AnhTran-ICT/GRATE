@@ -1,14 +1,67 @@
-import React from "react";
-import {View,Text,ScrollView,TouchableOpacity} from "react-native";
+import React, {useCallback,useState} from "react";
+import {View,Text,ScrollView,TouchableOpacity,Alert,Platform} from "react-native";
+import {useFocusEffect} from "@react-navigation/native";
 import Header from "../components/Header";
 import GrateScore from "../components/GrateScore";
+import ReviewForm from "../components/ReviewForm";
+import ReviewCard from "../components/ReviewCard";
+import {getCurrentUser,getReviewsForGame,addReview} from "../utils/storage";
 import styles from "../styles/style";
 
 export default function GameDetailScreen({
     route,
     navigation
 }) {
-    const game = route.params?.game;
+    const game =
+        route.params?.game;
+
+    const [currentUser, setCurrentUser] =
+        useState(null);
+
+    const [reviews, setReviews] =
+        useState([]);
+
+    function showMessage(
+        title,
+        message
+    ) {
+        if (Platform.OS === "web") {
+            window.alert(
+                `${title}\n\n${message}`
+            );
+        }
+        else {
+            Alert.alert(
+                title,
+                message
+            );
+        }
+    }
+
+    const loadGameData =
+        useCallback(
+            async () => {
+                if (!game) {
+                    return;
+                }
+                const user =
+                    await getCurrentUser();
+
+                const gameReviews =
+                    await getReviewsForGame(
+                        game.id
+                    );
+                setCurrentUser(user);
+                setReviews(gameReviews);
+            },
+            [game]
+        );
+
+    useFocusEffect(
+        useCallback(() => {
+            loadGameData();
+        }, [loadGameData])
+    );
 
     if (!game) {
         return (
@@ -40,24 +93,92 @@ export default function GameDetailScreen({
         );
     }
 
+    const alreadyReviewed =
+        currentUser
+            ? reviews.some(
+                review =>
+                    review.userId ===
+                    currentUser.id
+            )
+            : false;
+
+    const communityScore =
+        reviews.length > 0
+            ? Math.round(
+                reviews.reduce(
+                    (total, review) =>
+                        total +
+                        review.rating,
+                    0
+                ) /
+                reviews.length
+            )
+            : game.score;
+
     function getRatingLabel() {
-        if (game.score >= 75) {
+        if (communityScore >= 75) {
             return "Very Grate!";
         }
-        else if (game.score >= 50) {
+        if (communityScore >= 50) {
             return "Decent";
         }
         return "Not Grate";
     }
 
     function getRatingDescription() {
-        if (game.score >= 75) {
+        if (communityScore >= 75) {
             return "Highly rated by the GRATE community.";
         }
-        else if (game.score >= 50) {
+        if (communityScore >= 50) {
             return "Mixed opinions from the GRATE community.";
         }
         return "Not recommended by most of the GRATE community.";
+    }
+
+    async function handleSubmitReview({
+        rating,
+        reviewText
+    }) {
+        if (!currentUser) {
+            showMessage(
+                "Login Required",
+                "You must be logged in to submit a review."
+            );
+            return false;
+        }
+
+        const newReview = {
+            id: Date.now().toString(),
+            gameId: game.id,
+            userId: currentUser.id,
+            username:
+                currentUser.username ||
+                currentUser.email,
+            rating: rating,
+            reviewText: reviewText,
+            createdAt:
+                new Date().toISOString()
+        };
+
+        const result =
+            await addReview(
+                newReview
+            );
+
+        if (!result.success) {
+            if (
+                result.reason ===
+                "duplicate"
+            ) {
+                showMessage(
+                    "Review Already Submitted",
+                    "You can only submit one review for each game."
+                );
+            }
+            return false;
+        }
+        await loadGameData();
+        return true;
     }
 
     return (
@@ -69,9 +190,12 @@ export default function GameDetailScreen({
 
             <ScrollView
                 style={styles.gameDetailScroll}
-                contentContainerStyle={styles.gameDetailScrollContent}
+                contentContainerStyle={
+                    styles.gameDetailScrollContent
+                }
                 showsVerticalScrollIndicator={false}
             >
+
                 <View style={styles.gameDetailContent}>
 
                     {/* HERO */}
@@ -86,8 +210,8 @@ export default function GameDetailScreen({
                             <Text style={styles.gameDetailTitle}>
                                 {game.title}
                             </Text>
-                            <View style={styles.gameTagRow}>
 
+                            <View style={styles.gameTagRow}>
                                 <View style={styles.gameTag}>
                                     <Text style={styles.gameTagText}>
                                         {game.genre}
@@ -115,7 +239,7 @@ export default function GameDetailScreen({
 
                         <View style={styles.detailScoreRow}>
                             <GrateScore
-                                score={game.score}
+                                score={communityScore}
                             />
 
                             <View style={styles.detailScoreInformation}>
@@ -128,7 +252,15 @@ export default function GameDetailScreen({
                                 </Text>
 
                                 <Text style={styles.detailScoreValue}>
-                                    Community Score: {game.score}/100
+                                    Community Score: {communityScore}/100
+                                </Text>
+
+                                <Text style={styles.reviewCountText}>
+                                    {reviews.length}
+                                    {" "}
+                                    {reviews.length === 1
+                                        ? "review"
+                                        : "reviews"}
                                 </Text>
                             </View>
                         </View>
@@ -145,7 +277,7 @@ export default function GameDetailScreen({
                         </Text>
                     </View>
 
-                    {/* GAME INFORMATION */}
+                    {/* INFORMATION */}
                     <View style={styles.detailSection}>
                         <Text style={styles.detailSectionLabel}>
                             GAME INFORMATION
@@ -187,32 +319,60 @@ export default function GameDetailScreen({
                             </Text>
 
                             <Text style={styles.informationValue}>
-                                {game.score}/100
+                                {communityScore}/100
                             </Text>
                         </View>
                     </View>
 
-                    {/* US6 PLACEHOLDER */}
+                    {/* WRITE REVIEW */}
+                    <View style={styles.detailSection}>
+                        <Text style={styles.detailSectionLabel}>
+                            WRITE A REVIEW
+                        </Text>
+
+                        <ReviewForm
+                            onSubmit={
+                                handleSubmitReview
+                            }
+                            alreadyReviewed={
+                                alreadyReviewed
+                            }
+                        />
+                    </View>
+
+                    {/* COMMUNITY REVIEWS */}
                     <View style={styles.detailSection}>
                         <View style={styles.communityHeader}>
                             <Text style={styles.detailSectionLabel}>
                                 COMMUNITY REVIEWS
                             </Text>
 
-                            <Text style={styles.comingSoonText}>
-                                Coming soon
+                            <Text style={styles.communityReviewCount}>
+                                {reviews.length}
                             </Text>
                         </View>
 
-                        <View style={styles.noReviewsCard}>
-                            <Text style={styles.noReviewsTitle}>
-                                Community reviews
-                            </Text>
+                        {reviews.length === 0 ? (
+                            <View style={styles.noReviewsCard}>
+                                <Text style={styles.noReviewsTitle}>
+                                    No reviews yet
+                                </Text>
 
-                            <Text style={styles.noReviewsText}>
-                                Player ratings and reviews will appear here.
-                            </Text>
-                        </View>
+                                <Text style={styles.noReviewsText}>
+                                    Be the first member of the GRATE community to review this game.
+                                </Text>
+                            </View>
+                        ) : (
+                            reviews
+                                .slice()
+                                .reverse()
+                                .map(review => (
+                                    <ReviewCard
+                                        key={review.id}
+                                        review={review}
+                                    />
+                                ))
+                        )}
                     </View>
                 </View>
             </ScrollView>

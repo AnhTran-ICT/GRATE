@@ -1,4 +1,4 @@
-export const initialUsers = [
+const initialUsers = [
     {
         id: "1",
         username: "Moderator",
@@ -7,3 +7,5 @@ export const initialUsers = [
         role: "moderator"
     }
 ];
+
+export default initialUsers;
