@@ -1,48 +1,43 @@
 import React from "react";
 
+
 import {
+
 View,
+
 Text,
-TouchableOpacity,
+
 StyleSheet
+
 } from "react-native";
+
+
+import LogoutButton
+from "../components/LogoutButton";
+
 
 
 export default function HomeScreen({navigation}){
 
 
-return(
+return (
 
 <View style={styles.container}>
 
 
 <Text style={styles.title}>
-GRATE
+    GRATE
 </Text>
 
 
-<Text style={styles.subtitle}>
-Game Rating Platform
+<Text>
+    Welcome to the Game Rating Platform
 </Text>
 
 
-
-<TouchableOpacity
-
-style={styles.button}
-
-onPress={() =>
-navigation.navigate("Register")
-}
-
->
-
-<Text style={styles.buttonText}>
-Create Account
-</Text>
-
-</TouchableOpacity>
-
+<LogoutButton
+    navigation={navigation}
+/>
 
 
 </View>
@@ -63,7 +58,7 @@ justifyContent:"center",
 
 alignItems:"center",
 
-padding:20
+gap:20
 
 },
 
@@ -71,39 +66,6 @@ padding:20
 title:{
 
 fontSize:32,
-
-fontWeight:"bold"
-
-},
-
-
-subtitle:{
-
-fontSize:16,
-
-marginBottom:40
-
-},
-
-
-button:{
-
-backgroundColor:"#222",
-
-padding:15,
-
-borderRadius:10,
-
-width:"80%"
-
-},
-
-
-buttonText:{
-
-color:"white",
-
-textAlign:"center",
 
 fontWeight:"bold"
 
