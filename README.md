@@ -36,3 +36,12 @@ Clone the repository:
 
 ```bash
 git clone <repository-url>
+
+## User Authentication
+
+Implemented:
+- User registration screen
+- Username/email/password input
+- Validation handling
+- Duplicate email checking
+- Local user storage
