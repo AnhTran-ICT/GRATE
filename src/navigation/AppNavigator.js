@@ -7,7 +7,9 @@ from "@react-navigation/native-stack";
 
 
 import HomeScreen
-from "../Screens/HomeScreen";
+from "../screens/HomeScreen";
+import RegisterScreen 
+from "../screens/RegisterScreen";
 
 
 const Stack =
@@ -26,6 +28,10 @@ name="Home"
 component={HomeScreen}
 />
 
+<Stack.Screen
+name="Register"
+component={RegisterScreen}
+/>
 
 </Stack.Navigator>
 

@@ -16,7 +16,7 @@ The platform provides a structured review system with moderation features to mai
 - React Navigation
 - AsyncStorage
 
----
+------
 
 ## Project Setup
 
@@ -28,7 +28,7 @@ Before running the project, ensure you have:
 - npm installed
 - Expo CLI installed
 
----
+------
 
 ## Installation
 
