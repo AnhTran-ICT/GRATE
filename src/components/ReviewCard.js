@@ -6,19 +6,26 @@ export default function ReviewCard({
     review,
     currentUser,
     onEdit,
-    onDelete
+    onDelete,
+    onReport
 }) {
     const isOwner =
         currentUser &&
         review.userId === currentUser.id;
 
+    const canReport =
+        currentUser &&
+        !isOwner;
+
     function getRatingText() {
         if (review.rating >= 75) {
             return "Very Grate!";
         }
-        else if (review.rating >= 50) {
+
+        if (review.rating >= 50) {
             return "Decent";
         }
+
         return "Not Grate";
     }
 
@@ -32,9 +39,7 @@ export default function ReviewCard({
 
                     <Text style={styles.reviewDate}>
                         {review.createdAt
-                            ? new Date(
-                                review.createdAt
-                            ).toLocaleDateString()
+                            ? new Date(review.createdAt).toLocaleDateString()
                             : ""}
                     </Text>
 
@@ -64,9 +69,7 @@ export default function ReviewCard({
                 <View style={styles.reviewActionRow}>
                     <TouchableOpacity
                         style={styles.reviewEditButton}
-                        onPress={() =>
-                            onEdit(review)
-                        }
+                        onPress={() => onEdit(review)}
                     >
                         <Text style={styles.reviewEditButtonText}>
                             Edit
@@ -75,15 +78,24 @@ export default function ReviewCard({
 
                     <TouchableOpacity
                         style={styles.reviewDeleteButton}
-                        onPress={() =>
-                            onDelete(review)
-                        }
+                        onPress={() => onDelete(review)}
                     >
                         <Text style={styles.reviewDeleteButtonText}>
                             Delete
                         </Text>
                     </TouchableOpacity>
                 </View>
+            )}
+
+            {canReport && (
+                <TouchableOpacity
+                    style={styles.reportReviewButton}
+                    onPress={() => onReport(review)}
+                >
+                    <Text style={styles.reportReviewButtonText}>
+                        Report Review
+                    </Text>
+                </TouchableOpacity>
             )}
         </View>
     );
