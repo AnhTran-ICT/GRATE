@@ -391,7 +391,211 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 24,
         marginTop: 20
-    }
+    },
+
+    gameDetailScroll: {
+        flex: 1
+    },
+
+    gameDetailScrollContent: {
+        paddingBottom: 50
+    },
+
+    gameDetailContent: {
+        width: "100%",
+        maxWidth: 1000,
+        alignSelf: "center",
+        paddingHorizontal: 24,
+        paddingTop: 30
+    },
+
+    /* GAME HERO */
+    gameHero: {
+        flexDirection: "row",
+        alignItems: "center",
+        backgroundColor: "#ffffff",
+        borderWidth: 1,
+        borderColor: "#e2e2e2",
+        borderRadius: 14,
+        padding: 22,
+        marginBottom: 20
+    },
+
+    gameHeroCover: {
+        width: 150,
+        height: 180,
+        backgroundColor: "#18181f",
+        borderRadius: 10,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    
+    gameHeroLetter: {
+        color: "#22c55e",
+        fontSize: 70,
+        fontWeight: "900"
+    },
+
+    gameHeroInformation: {
+        flex: 1,
+        paddingLeft: 28
+    },
+
+    gameDetailTitle: {
+        fontSize: 38,
+        fontWeight: "900",
+        color: "#18181f",
+        marginBottom: 14
+    },
+
+    gameTagRow: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginBottom: 18
+    },
+
+    gameTag: {
+        backgroundColor: "#eeeeee",
+        paddingVertical: 7,
+        paddingHorizontal: 13,
+        borderRadius: 16,
+        marginRight: 8,
+        marginBottom: 5
+    },
+
+    gameTagText: {
+        fontSize: 13,
+        fontWeight: "700",
+        color: "#333333"
+    },
+
+    gameDeveloper: {
+        fontSize: 15,
+        color: "#555555"
+    },
+
+
+    /* DETAIL SECTIONS */
+
+    detailSection: {
+        backgroundColor: "#ffffff",
+
+        borderWidth: 1,
+        borderColor: "#e2e2e2",
+
+        borderRadius: 14,
+
+        padding: 22,
+
+        marginBottom: 18
+    },
+
+    detailSectionLabel: {
+        fontSize: 14,
+        fontWeight: "900",
+        color: "#18181f",
+        marginBottom: 18
+    },
+
+
+    /* SCORE */
+
+    detailScoreRow: {
+        flexDirection: "row",
+        alignItems: "center"
+    },
+
+    detailScoreInformation: {
+        flex: 1,
+        paddingLeft: 22
+    },
+
+    detailRatingTitle: {
+        fontSize: 25,
+        fontWeight: "900",
+        color: "#22a447",
+        marginBottom: 7
+    },
+
+    detailRatingDescription: {
+        fontSize: 15,
+        lineHeight: 22,
+        color: "#444444",
+        marginBottom: 9
+    },
+
+    detailScoreValue: {
+        fontSize: 14,
+        fontWeight: "700",
+        color: "#666666"
+    },
+
+
+    /* DESCRIPTION */
+
+    gameDescription: {
+        fontSize: 16,
+        lineHeight: 26,
+        color: "#333333"
+    },
+
+
+    /* INFORMATION */
+
+    informationRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+
+        paddingVertical: 12,
+
+        borderBottomWidth: 1,
+        borderBottomColor: "#eeeeee"
+    },
+
+    informationLabel: {
+        fontSize: 15,
+        color: "#666666"
+    },
+
+    informationValue: {
+        fontSize: 15,
+        fontWeight: "700",
+        color: "#18181f",
+        textAlign: "right"
+    },
+
+
+    /* REVIEWS PLACEHOLDER */
+
+    communityHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center"
+    },
+
+    comingSoonText: {
+        fontSize: 13,
+        color: "#777777"
+    },
+
+    noReviewsCard: {
+        backgroundColor: "#f7f7f7",
+        borderRadius: 10,
+        padding: 25,
+        alignItems: "center"
+    },
+
+    noReviewsTitle: {
+        fontSize: 18,
+        fontWeight: "800",
+        marginBottom: 6
+    },
+
+    noReviewsText: {
+        color: "#666666",
+        fontSize: 14,
+        textAlign: "center"
+    },
 });
 
 export default styles;
