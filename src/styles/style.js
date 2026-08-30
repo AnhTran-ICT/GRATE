@@ -565,36 +565,211 @@ const styles = StyleSheet.create({
     },
 
 
-    /* REVIEWS PLACEHOLDER */
+    /* =========================
+    REVIEW FORM
+    ========================= */
 
-    communityHeader: {
+    reviewInputLabel: {
+        fontSize: 12,
+        fontWeight: "900",
+        color: "#555555",
+        marginBottom: 8
+    },
+
+    ratingInputRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 20
+    },
+
+    ratingInput: {
+        width: 110,
+
+        backgroundColor: "#ffffff",
+
+        borderWidth: 1,
+        borderColor: "#d5d5d5",
+
+        borderRadius: 8,
+
+        paddingVertical: 12,
+        paddingHorizontal: 14,
+
+        fontSize: 18,
+        fontWeight: "800"
+    },
+
+    ratingOutOf: {
+        marginLeft: 10,
+        fontSize: 16,
+        color: "#666666",
+        fontWeight: "700"
+    },
+
+    reviewTextArea: {
+        width: "100%",
+        minHeight: 130,
+
+        backgroundColor: "#ffffff",
+
+        borderWidth: 1,
+        borderColor: "#d5d5d5",
+
+        borderRadius: 9,
+
+        padding: 14,
+
+        fontSize: 15,
+        lineHeight: 22
+    },
+
+    reviewCharacterRow: {
+        alignItems: "flex-end",
+        marginTop: 6
+    },
+
+    reviewCharacterCount: {
+        fontSize: 12,
+        color: "#888888"
+    },
+
+    reviewSubmitButton: {
+        backgroundColor: "#22c55e",
+
+        alignSelf: "flex-start",
+
+        paddingVertical: 12,
+        paddingHorizontal: 22,
+
+        borderRadius: 8,
+
+        marginTop: 16
+    },
+
+    reviewSubmitButtonText: {
+        color: "#ffffff",
+        fontSize: 15,
+        fontWeight: "900"
+    },
+
+
+    /* ALREADY REVIEWED */
+
+    reviewAlreadySubmitted: {
+        backgroundColor: "#f3f4f4",
+
+        borderWidth: 1,
+        borderColor: "#dddddd",
+
+        borderRadius: 10,
+
+        padding: 18
+    },
+
+    reviewAlreadyTitle: {
+        fontSize: 17,
+        fontWeight: "900",
+        color: "#18181f",
+        marginBottom: 5
+    },
+
+    reviewAlreadyText: {
+        fontSize: 14,
+        lineHeight: 21,
+        color: "#666666"
+    },
+
+
+    /* =========================
+    REVIEW CARD
+    ========================= */
+
+    reviewCard: {
+        backgroundColor: "#fafafa",
+
+        borderWidth: 1,
+        borderColor: "#e4e4e4",
+
+        borderRadius: 10,
+
+        padding: 18,
+
+        marginBottom: 12
+    },
+
+    reviewCardHeader: {
         flexDirection: "row",
         justifyContent: "space-between",
+        alignItems: "flex-start",
+
+        marginBottom: 15
+    },
+
+    reviewUsername: {
+        fontSize: 16,
+        fontWeight: "900",
+        color: "#18181f",
+        marginBottom: 3
+    },
+
+    reviewDate: {
+        fontSize: 12,
+        color: "#888888"
+    },
+
+    reviewRatingBox: {
+        minWidth: 76,
+
+        backgroundColor: "#18181f",
+
+        borderRadius: 8,
+
+        paddingVertical: 7,
+        paddingHorizontal: 10,
+
         alignItems: "center"
     },
 
-    comingSoonText: {
+    reviewRatingNumber: {
+        color: "#22c55e",
+        fontSize: 20,
+        fontWeight: "900"
+    },
+
+    reviewRatingLabel: {
+        color: "#ffffff",
+        fontSize: 10,
+        fontWeight: "700"
+    },
+
+    reviewBody: {
+        fontSize: 15,
+        lineHeight: 23,
+        color: "#333333"
+    },
+
+    reviewCountText: {
+        marginTop: 5,
         fontSize: 13,
-        color: "#777777"
+        color: "#888888"
     },
 
-    noReviewsCard: {
-        backgroundColor: "#f7f7f7",
-        borderRadius: 10,
-        padding: 25,
-        alignItems: "center"
-    },
+    communityReviewCount: {
+        backgroundColor: "#18181f",
 
-    noReviewsTitle: {
-        fontSize: 18,
-        fontWeight: "800",
-        marginBottom: 6
-    },
+        color: "#ffffff",
 
-    noReviewsText: {
-        color: "#666666",
-        fontSize: 14,
-        textAlign: "center"
+        minWidth: 30,
+
+        textAlign: "center",
+
+        paddingVertical: 4,
+        paddingHorizontal: 8,
+
+        borderRadius: 12,
+
+        fontSize: 12,
+        fontWeight: "800"
     },
 });
 
