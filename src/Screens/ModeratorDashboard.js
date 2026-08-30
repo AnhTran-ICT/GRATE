@@ -1,63 +1,22 @@
 import React from "react";
+import {View,Text} from "react-native";
+import LogoutButton from "../components/LogoutButton";
+import styles from "../styles/style";
 
-
-import {
-
-View,
-
-Text,
-
-StyleSheet
-
-} from "react-native";
-
-
-
-export default function ModeratorDashboard(){
-
-
+export default function ModeratorDashboard({ navigation }) {
     return (
-
         <View style={styles.container}>
-
-
-            <Text style={styles.title}>
+            <Text style={styles.screenTitle}>
                 Moderator Dashboard
             </Text>
 
-
-            <Text>
-                Review reports and manage content.
+            <Text style={styles.welcomeText}>
+                Review reports and manage inappropriate content.
             </Text>
-
-
+            
+            <LogoutButton
+                navigation={navigation}
+            />
         </View>
-
     );
-
 }
-
-
-
-const styles = StyleSheet.create({
-
-    container:{
-
-        flex:1,
-
-        justifyContent:"center",
-
-        alignItems:"center"
-
-    },
-
-
-    title:{
-
-        fontSize:24,
-
-        fontWeight:"bold"
-
-    }
-
-});
