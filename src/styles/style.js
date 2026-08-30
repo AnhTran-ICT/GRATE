@@ -756,19 +756,79 @@ const styles = StyleSheet.create({
 
     communityReviewCount: {
         backgroundColor: "#18181f",
-
         color: "#ffffff",
-
         minWidth: 30,
-
         textAlign: "center",
-
         paddingVertical: 4,
         paddingHorizontal: 8,
-
         borderRadius: 12,
-
         fontSize: 12,
+        fontWeight: "800"
+    },
+
+    reviewActionRow: {
+        flexDirection: "row",
+        marginTop: 18
+    },
+
+    reviewEditButton: {
+        backgroundColor: "#18181f",
+        paddingVertical: 9,
+        paddingHorizontal: 18,
+        borderRadius: 7,
+        marginRight: 10
+    },
+
+    reviewEditButtonText: {
+        color: "#ffffff",
+        fontWeight: "800"
+    },
+
+    reviewDeleteButton: {
+        backgroundColor: "#dc2626",
+        paddingVertical: 9,
+        paddingHorizontal: 18,
+        borderRadius: 7
+    },
+
+    reviewDeleteButtonText: {
+        color: "#ffffff",
+        fontWeight: "800"
+    },
+
+    reviewEditedText: {
+        marginTop: 3,
+        fontSize: 11,
+        color: "#888888",
+        fontStyle: "italic"
+    },
+
+    editReviewContainer: {
+        backgroundColor: "#f7f7f7",
+        borderWidth: 1,
+        borderColor: "#dddddd",
+        borderRadius: 10,
+        padding: 18,
+        marginBottom: 12
+    },
+
+    editReviewActionRow: {
+        flexDirection: "row",
+        alignItems: "center"
+    },
+
+    cancelEditButton: {
+        marginTop: 16,
+        marginLeft: 10,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: "#cccccc"
+    },
+
+    cancelEditButtonText: {
+        color: "#444444",
         fontWeight: "800"
     },
 });

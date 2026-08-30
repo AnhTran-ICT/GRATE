@@ -1,16 +1,22 @@
 import React from "react";
-import {View,Text} from "react-native";
+import {View,Text,TouchableOpacity} from "react-native";
 import styles from "../styles/style";
 
 export default function ReviewCard({
-    review
+    review,
+    currentUser,
+    onEdit,
+    onDelete
 }) {
+    const isOwner =
+        currentUser &&
+        review.userId === currentUser.id;
+
     function getRatingText() {
         if (review.rating >= 75) {
             return "Very Grate!";
         }
-
-        if (review.rating >= 50) {
+        else if (review.rating >= 50) {
             return "Decent";
         }
         return "Not Grate";
@@ -31,6 +37,12 @@ export default function ReviewCard({
                             ).toLocaleDateString()
                             : ""}
                     </Text>
+
+                    {review.updatedAt && (
+                        <Text style={styles.reviewEditedText}>
+                            Edited
+                        </Text>
+                    )}
                 </View>
 
                 <View style={styles.reviewRatingBox}>
@@ -47,6 +59,32 @@ export default function ReviewCard({
             <Text style={styles.reviewBody}>
                 {review.reviewText}
             </Text>
+
+            {isOwner && (
+                <View style={styles.reviewActionRow}>
+                    <TouchableOpacity
+                        style={styles.reviewEditButton}
+                        onPress={() =>
+                            onEdit(review)
+                        }
+                    >
+                        <Text style={styles.reviewEditButtonText}>
+                            Edit
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.reviewDeleteButton}
+                        onPress={() =>
+                            onDelete(review)
+                        }
+                    >
+                        <Text style={styles.reviewDeleteButtonText}>
+                            Delete
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            )}
         </View>
     );
 }

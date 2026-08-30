@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import defaultUsers from "../data/users";
+
 const USERS_KEY = "grate_users";
 const CURRENT_USER_KEY = "grate_current_user";
 const REVIEWS_KEY = "grate_reviews";
@@ -10,6 +11,7 @@ export async function getUsers() {
             await AsyncStorage.getItem(
                 USERS_KEY
             );
+
         let users = storedUsers
             ? JSON.parse(storedUsers)
             : [];
@@ -22,11 +24,11 @@ export async function getUsers() {
                         user.email.toLowerCase() ===
                         defaultUser.email.toLowerCase()
                 );
+
             if (!exists) {
                 users.push(defaultUser);
             }
         });
-
         await AsyncStorage.setItem(
             USERS_KEY,
             JSON.stringify(users)
@@ -78,6 +80,7 @@ export async function getCurrentUser() {
             await AsyncStorage.getItem(
                 CURRENT_USER_KEY
             );
+
         if (!storedUser) {
             return null;
         }
@@ -111,6 +114,7 @@ export async function clearCurrentUser() {
 /* =========================
    REVIEWS
 ========================= */
+
 export async function getReviews() {
     try {
         const storedReviews =
@@ -160,6 +164,7 @@ export async function getReviewsForGame(gameId) {
 export async function addReview(review) {
     const reviews =
         await getReviews();
+
     const duplicate =
         reviews.find(
             existingReview =>
@@ -177,6 +182,73 @@ export async function addReview(review) {
         ...reviews,
         review
     ];
+    await saveReviews(
+        updatedReviews
+    );
+    return {
+        success: true
+    };
+}
+
+export async function updateReview(
+    reviewId,
+    userId,
+    updatedData
+) {
+    const reviews =
+        await getReviews();
+
+    const reviewIndex =
+        reviews.findIndex(
+            review =>
+                review.id === reviewId &&
+                review.userId === userId
+        );
+    if (reviewIndex === -1) {
+        return {
+            success: false,
+            reason: "not_found"
+        };
+    }
+    reviews[reviewIndex] = {
+        ...reviews[reviewIndex],
+        rating: updatedData.rating,
+        reviewText: updatedData.reviewText,
+        updatedAt: new Date().toISOString()
+    };
+    await saveReviews(
+        reviews
+    );
+    return {
+        success: true
+    };
+}
+
+export async function deleteReview(
+    reviewId,
+    userId
+) {
+    const reviews =
+        await getReviews();
+
+    const review =
+        reviews.find(
+            existingReview =>
+                existingReview.id === reviewId &&
+                existingReview.userId === userId
+        );
+    if (!review) {
+        return {
+            success: false,
+            reason: "not_found"
+        };
+    }
+
+    const updatedReviews =
+        reviews.filter(
+            existingReview =>
+                existingReview.id !== reviewId
+        );
     await saveReviews(
         updatedReviews
     );

@@ -1,19 +1,19 @@
-import React, {useCallback,useState} from "react";
+import React, { useCallback, useState } from "react";
 import {View,Text,ScrollView,TouchableOpacity,Alert,Platform} from "react-native";
-import {useFocusEffect} from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import Header from "../components/Header";
 import GrateScore from "../components/GrateScore";
 import ReviewForm from "../components/ReviewForm";
 import ReviewCard from "../components/ReviewCard";
-import {getCurrentUser,getReviewsForGame,addReview} from "../utils/storage";
+import EditReviewForm from "../components/EditReviewForm";
+import {getCurrentUser,getReviewsForGame,addReview,updateReview,deleteReview} from "../utils/storage";
 import styles from "../styles/style";
 
 export default function GameDetailScreen({
     route,
     navigation
 }) {
-    const game =
-        route.params?.game;
+    const game = route.params?.game;
 
     const [currentUser, setCurrentUser] =
         useState(null);
@@ -21,16 +21,15 @@ export default function GameDetailScreen({
     const [reviews, setReviews] =
         useState([]);
 
-    function showMessage(
-        title,
-        message
-    ) {
+    const [editingReview, setEditingReview] =
+        useState(null);
+
+    function showMessage(title, message) {
         if (Platform.OS === "web") {
             window.alert(
                 `${title}\n\n${message}`
             );
-        }
-        else {
+        } else {
             Alert.alert(
                 title,
                 message
@@ -44,13 +43,11 @@ export default function GameDetailScreen({
                 if (!game) {
                     return;
                 }
+
                 const user =
                     await getCurrentUser();
-
                 const gameReviews =
-                    await getReviewsForGame(
-                        game.id
-                    );
+                    await getReviewsForGame(game.id);
                 setCurrentUser(user);
                 setReviews(gameReviews);
             },
@@ -70,7 +67,6 @@ export default function GameDetailScreen({
                     navigation={navigation}
                     showBack
                 />
-
                 <View style={styles.gameDetailContent}>
                     <Text style={styles.emptyStateTitle}>
                         Game not found
@@ -78,10 +74,7 @@ export default function GameDetailScreen({
 
                     <TouchableOpacity
                         style={styles.primaryButton}
-                        onPress={() =>
-                            navigation.navigate(
-                                "GameCatalogue"
-                            )
+                        onPress={() =>navigation.navigate("GameCatalogue")
                         }
                     >
                         <Text style={styles.primaryButtonText}>
@@ -107,11 +100,9 @@ export default function GameDetailScreen({
             ? Math.round(
                 reviews.reduce(
                     (total, review) =>
-                        total +
-                        review.rating,
+                        total + review.rating,
                     0
-                ) /
-                reviews.length
+                ) / reviews.length
             )
             : game.score;
 
@@ -154,8 +145,8 @@ export default function GameDetailScreen({
             username:
                 currentUser.username ||
                 currentUser.email,
-            rating: rating,
-            reviewText: reviewText,
+            rating,
+            reviewText,
             createdAt:
                 new Date().toISOString()
         };
@@ -166,10 +157,7 @@ export default function GameDetailScreen({
             );
 
         if (!result.success) {
-            if (
-                result.reason ===
-                "duplicate"
-            ) {
+            if (result.reason === "duplicate") {
                 showMessage(
                     "Review Already Submitted",
                     "You can only submit one review for each game."
@@ -179,6 +167,105 @@ export default function GameDetailScreen({
         }
         await loadGameData();
         return true;
+    }
+
+    async function handleUpdateReview(
+        review,
+        updatedData
+    ) {
+        if (!currentUser) {
+            return;
+        }
+        const result =
+            await updateReview(
+                review.id,
+                currentUser.id,
+                updatedData
+            );
+
+        if (!result.success) {
+            showMessage(
+                "Update Failed",
+                "This review could not be updated."
+            );
+            return;
+        }
+        setEditingReview(null);
+        await loadGameData();
+        showMessage(
+            "Review Updated",
+            "Your review has been updated successfully."
+        );
+    }
+
+    async function handleDeleteReview(review) {
+        if (!currentUser) {
+            return;
+        }
+
+        if (
+            review.userId !==
+            currentUser.id
+        ) {
+            showMessage(
+                "Not Allowed",
+                "You can only delete your own review."
+            );
+            return;
+        }
+
+        if (Platform.OS === "web") {
+            const confirmed =
+                window.confirm(
+                    "Are you sure you want to delete this review?"
+                );
+            if (!confirmed) {
+                return;
+            }
+            await performDelete(review);
+            return;
+        }
+
+        Alert.alert(
+            "Delete Review",
+            "Are you sure you want to delete this review?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Delete",
+                    style: "destructive",
+                    onPress: () =>
+                        performDelete(review)
+                }
+            ]
+        );
+    }
+
+    async function performDelete(review) {
+        const result =
+            await deleteReview(
+                review.id,
+                currentUser.id
+            );
+
+        if (!result.success) {
+            showMessage(
+                "Delete Failed",
+                "This review could not be deleted."
+            );
+            return;
+        }
+
+        setEditingReview(null);
+        await loadGameData();
+
+        showMessage(
+            "Review Deleted",
+            "Your review has been deleted successfully."
+        );
     }
 
     return (
@@ -195,7 +282,6 @@ export default function GameDetailScreen({
                 }
                 showsVerticalScrollIndicator={false}
             >
-
                 <View style={styles.gameDetailContent}>
 
                     {/* HERO */}
@@ -241,7 +327,6 @@ export default function GameDetailScreen({
                             <GrateScore
                                 score={communityScore}
                             />
-
                             <View style={styles.detailScoreInformation}>
                                 <Text style={styles.detailRatingTitle}>
                                     {getRatingLabel()}
@@ -256,8 +341,7 @@ export default function GameDetailScreen({
                                 </Text>
 
                                 <Text style={styles.reviewCountText}>
-                                    {reviews.length}
-                                    {" "}
+                                    {reviews.length}{" "}
                                     {reviews.length === 1
                                         ? "review"
                                         : "reviews"}
@@ -363,14 +447,33 @@ export default function GameDetailScreen({
                                 </Text>
                             </View>
                         ) : (
-                            reviews
-                                .slice()
-                                .reverse()
-                                .map(review => (
-                                    <ReviewCard
-                                        key={review.id}
-                                        review={review}
-                                    />
+                            reviews.slice().reverse().map(review => (editingReview && editingReview.id === review.id? (
+                                            <EditReviewForm
+                                                key={review.id}
+                                                review={review}
+                                                onSave={
+                                                    handleUpdateReview
+                                                }
+                                                onCancel={() =>
+                                                    setEditingReview(null)
+                                                }
+                                            />
+                                        )
+                                        : (
+                                            <ReviewCard
+                                                key={review.id}
+                                                review={review}
+                                                currentUser={
+                                                    currentUser
+                                                }
+                                                onEdit={
+                                                    setEditingReview
+                                                }
+                                                onDelete={
+                                                    handleDeleteReview
+                                                }
+                                            />
+                                        )
                                 ))
                         )}
                     </View>
