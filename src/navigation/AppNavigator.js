@@ -1,40 +1,66 @@
 import React from "react";
 
 import {
-createNativeStackNavigator
-}
-from "@react-navigation/native-stack";
+    createNativeStackNavigator
+} from "@react-navigation/native-stack";
 
 
-import HomeScreen
-from "../screens/HomeScreen";
-import RegisterScreen 
-from "../screens/RegisterScreen";
+import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
+import HomeScreen from "../screens/HomeScreen";
+import ModeratorDashboard from "../screens/ModeratorDashboard";
 
 
-const Stack =
-createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
+
 
 
 export default function AppNavigator(){
 
-return(
+    return (
 
-<Stack.Navigator>
+        <Stack.Navigator
+            initialRouteName="Login"
+        >
+
+            <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{
+                    title:"Login"
+                }}
+            />
 
 
-<Stack.Screen
-name="Home"
-component={HomeScreen}
-/>
+            <Stack.Screen
+                name="Register"
+                component={RegisterScreen}
+                options={{
+                    title:"Register"
+                }}
+            />
 
-<Stack.Screen
-name="Register"
-component={RegisterScreen}
-/>
 
-</Stack.Navigator>
+            <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{
+                    title:"Home"
+                }}
+            />
 
-);
+
+            <Stack.Screen
+                name="ModeratorDashboard"
+                component={ModeratorDashboard}
+                options={{
+                    title:"Moderator"
+                }}
+            />
+
+
+        </Stack.Navigator>
+
+    );
 
 }
