@@ -1,0 +1,23 @@
+{
+  "expo": {
+
+    "name": "GRATE",
+
+    "slug": "grate",
+
+    "version": "1.0.0",
+
+    "orientation": "portrait",
+
+    "android": {
+      "package":
+      "com.grate.app"
+    },
+
+    "ios": {
+      "bundleIdentifier":
+      "com.grate.app"
+    }
+
+  }
+}
