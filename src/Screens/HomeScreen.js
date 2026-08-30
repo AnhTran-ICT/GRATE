@@ -1,74 +1,38 @@
 import React from "react";
+import {View,Text,TouchableOpacity} from "react-native";
+import styles from "../styles/style";
+import LogoutButton from "../components/LogoutButton";
 
+export default function HomeScreen({ navigation }) {
+    return (
+        <View style={styles.container}>
+            <Text style={styles.logo}>
+                GRATE
+            </Text>
 
-import {
+            <Text style={styles.subtitle}>
+                Game Rating Platform
+            </Text>
 
-View,
+            <Text style={styles.welcomeText}>
+                Welcome to the Game Rating Platform
+            </Text>
 
-Text,
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() =>
+                    navigation.navigate("GameCatalogue")
+                }>
 
-StyleSheet
+                <Text style={styles.buttonText}>
+                    Browse Games
+                </Text>
+            </TouchableOpacity>
 
-} from "react-native";
+            <LogoutButton
+                navigation={navigation}
+            />
+        </View>
 
-
-import LogoutButton
-from "../components/LogoutButton";
-
-
-
-export default function HomeScreen({navigation}){
-
-
-return (
-
-<View style={styles.container}>
-
-
-<Text style={styles.title}>
-    GRATE
-</Text>
-
-
-<Text>
-    Welcome to the Game Rating Platform
-</Text>
-
-
-<LogoutButton
-    navigation={navigation}
-/>
-
-
-</View>
-
-);
-
+    );
 }
-
-
-
-const styles = StyleSheet.create({
-
-container:{
-
-flex:1,
-
-justifyContent:"center",
-
-alignItems:"center",
-
-gap:20
-
-},
-
-
-title:{
-
-fontSize:32,
-
-fontWeight:"bold"
-
-}
-
-});
