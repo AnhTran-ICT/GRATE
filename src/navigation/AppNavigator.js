@@ -5,6 +5,7 @@ import RegisterScreen from "../screens/RegisterScreen";
 import HomeScreen from "../screens/HomeScreen";
 import GameCatalogueScreen from "../screens/GameCatalogueScreen";
 import GameDetailScreen from "../screens/GameDetailScreen";
+import MyReviewsScreen from "../screens/MyReviewScreen";
 import ModeratorDashboard from "../screens/ModeratorDashboard";
 
 const Stack =
@@ -42,6 +43,11 @@ export default function AppNavigator() {
             <Stack.Screen
                 name="GameDetail"
                 component={GameDetailScreen}
+            />
+
+            <Stack.Screen
+                name="MyReviews"
+                component={MyReviewsScreen}
             />
 
             <Stack.Screen

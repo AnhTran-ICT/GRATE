@@ -11,24 +11,26 @@ export async function getUsers() {
             await AsyncStorage.getItem(
                 USERS_KEY
             );
-
         let users = storedUsers
             ? JSON.parse(storedUsers)
             : [];
 
-        defaultUsers.forEach(defaultUser => {
-            const exists =
-                users.some(
-                    user =>
-                        user.email &&
-                        user.email.toLowerCase() ===
-                        defaultUser.email.toLowerCase()
-                );
-
-            if (!exists) {
-                users.push(defaultUser);
+        defaultUsers.forEach(
+            defaultUser => {
+                const exists =
+                    users.some(
+                        user =>
+                            user.email &&
+                            user.email.toLowerCase() ===
+                            defaultUser.email.toLowerCase()
+                    );
+                if (!exists) {
+                    users.push(
+                        defaultUser
+                    );
+                }
             }
-        });
+        );
         await AsyncStorage.setItem(
             USERS_KEY,
             JSON.stringify(users)
@@ -80,7 +82,6 @@ export async function getCurrentUser() {
             await AsyncStorage.getItem(
                 CURRENT_USER_KEY
             );
-
         if (!storedUser) {
             return null;
         }
@@ -110,6 +111,7 @@ export async function clearCurrentUser() {
         );
     }
 }
+
 
 /* =========================
    REVIEWS
@@ -161,6 +163,15 @@ export async function getReviewsForGame(gameId) {
     );
 }
 
+export async function getReviewsByUser(userId) {
+    const reviews =
+        await getReviews();
+    return reviews.filter(
+        review =>
+            review.userId === userId
+    );
+}
+
 export async function addReview(review) {
     const reviews =
         await getReviews();
@@ -182,12 +193,8 @@ export async function addReview(review) {
         ...reviews,
         review
     ];
-    await saveReviews(
-        updatedReviews
-    );
-    return {
-        success: true
-    };
+    await saveReviews(updatedReviews);
+    return {success: true};
 }
 
 export async function updateReview(
@@ -204,24 +211,25 @@ export async function updateReview(
                 review.id === reviewId &&
                 review.userId === userId
         );
+
     if (reviewIndex === -1) {
         return {
             success: false,
             reason: "not_found"
         };
     }
+
     reviews[reviewIndex] = {
         ...reviews[reviewIndex],
-        rating: updatedData.rating,
-        reviewText: updatedData.reviewText,
-        updatedAt: new Date().toISOString()
+        rating:
+            updatedData.rating,
+        reviewText:
+            updatedData.reviewText,
+        updatedAt:
+            new Date().toISOString()
     };
-    await saveReviews(
-        reviews
-    );
-    return {
-        success: true
-    };
+    await saveReviews(reviews);
+    return {success: true};
 }
 
 export async function deleteReview(
@@ -237,6 +245,7 @@ export async function deleteReview(
                 existingReview.id === reviewId &&
                 existingReview.userId === userId
         );
+
     if (!review) {
         return {
             success: false,
@@ -249,10 +258,6 @@ export async function deleteReview(
             existingReview =>
                 existingReview.id !== reviewId
         );
-    await saveReviews(
-        updatedReviews
-    );
-    return {
-        success: true
-    };
+    await saveReviews(updatedReviews);
+    return {success: true};
 }

@@ -1,4 +1,5 @@
 import {StyleSheet} from "react-native";
+import MyReviewCard from "../components/MyReviewCard";
 
 const styles = StyleSheet.create({
     page: {
@@ -6,9 +7,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#f7f7f7"
     },
 
-    /* =========================
-       HEADER
-    ========================= */
+    //Header
     header: {
         height: 72,
         width: "100%",
@@ -36,9 +35,13 @@ const styles = StyleSheet.create({
         fontWeight: "300"
     },
 
-    /* =========================
-       HOME
-    ========================= */
+    headerMyReviews: {
+        color: "#ffffff",
+        fontSize: 14,
+        fontWeight: "800"
+    },
+
+    //HOME
     homeHero: {
         flex: 1,
         justifyContent: "center",
@@ -87,9 +90,7 @@ const styles = StyleSheet.create({
         paddingBottom: 30
     },
 
-    /* =========================
-       AUTH
-    ========================= */
+    //Auth
     container: {
         flex: 1,
         justifyContent: "center",
@@ -148,9 +149,7 @@ const styles = StyleSheet.create({
         fontWeight: "700"
     },
 
-    /* =========================
-       CATALOGUE
-    ========================= */
+    //Catalogue
     catalogueContent: {
         flex: 1,
         width: "100%",
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
 
-    /* SEARCH */
+    //Search
     searchBar: {
         height: 50,
         width: "100%",
@@ -199,7 +198,7 @@ const styles = StyleSheet.create({
         color: "#777777"
     },
 
-    /* FILTERS */
+    //Filter
     filterLabel: {
         fontSize: 12,
         fontWeight: "800",
@@ -244,7 +243,7 @@ const styles = StyleSheet.create({
         color: "#ffffff"
     },
 
-    /* RESULT HEADER */
+    //Result Header
     resultHeader: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -263,9 +262,7 @@ const styles = StyleSheet.create({
         fontWeight: "700"
     },
 
-    /* =========================
-       GAME CARD
-    ========================= */
+    //Game Cad
     gameList: {
         paddingBottom: 40
     },
@@ -317,7 +314,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
 
-    /* SCORE IMAGE */
+    //Score Img
     grateScoreContainer: {
         width: 100,
         height: 100,
@@ -349,7 +346,7 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
 
-    /* EMPTY */
+    //Empty
     emptyState: {
         paddingVertical: 60,
         alignItems: "center"
@@ -366,10 +363,7 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
 
-    /* =========================
-       DETAILS
-    ========================= */
-
+    //Details
     screenTitle: {
         fontSize: 30,
         fontWeight: "900",
@@ -409,7 +403,7 @@ const styles = StyleSheet.create({
         paddingTop: 30
     },
 
-    /* GAME HERO */
+    //Game Hero
     gameHero: {
         flexDirection: "row",
         alignItems: "center",
@@ -475,7 +469,7 @@ const styles = StyleSheet.create({
     },
 
 
-    /* DETAIL SECTIONS */
+    //Detail Section
 
     detailSection: {
         backgroundColor: "#ffffff",
@@ -498,7 +492,7 @@ const styles = StyleSheet.create({
     },
 
 
-    /* SCORE */
+    //Score
 
     detailScoreRow: {
         flexDirection: "row",
@@ -531,7 +525,7 @@ const styles = StyleSheet.create({
     },
 
 
-    /* DESCRIPTION */
+    //Description
 
     gameDescription: {
         fontSize: 16,
@@ -540,7 +534,7 @@ const styles = StyleSheet.create({
     },
 
 
-    /* INFORMATION */
+    //Info
 
     informationRow: {
         flexDirection: "row",
@@ -565,10 +559,7 @@ const styles = StyleSheet.create({
     },
 
 
-    /* =========================
-    REVIEW FORM
-    ========================= */
-
+    //Review form
     reviewInputLabel: {
         fontSize: 12,
         fontWeight: "900",
@@ -653,7 +644,7 @@ const styles = StyleSheet.create({
     },
 
 
-    /* ALREADY REVIEWED */
+    //Already reviewed
 
     reviewAlreadySubmitted: {
         backgroundColor: "#f3f4f4",
@@ -680,9 +671,7 @@ const styles = StyleSheet.create({
     },
 
 
-    /* =========================
-    REVIEW CARD
-    ========================= */
+    //Review card
 
     reviewCard: {
         backgroundColor: "#fafafa",
@@ -830,6 +819,80 @@ const styles = StyleSheet.create({
     cancelEditButtonText: {
         color: "#444444",
         fontWeight: "800"
+    },
+
+    // MyReviewCard
+
+    myReviewsScroll: {
+        flex: 1
+    },
+
+    myReviewsScrollContent: {
+        flexGrow: 1,
+        paddingBottom: 50
+    },
+
+    myReviewsContent: {
+        width: "100%",
+        maxWidth: 1000,
+        alignSelf: "center",
+        paddingHorizontal: 20,
+        paddingTop: 30
+    },
+
+    myReviewsHeading: {
+        marginBottom: 24
+    },
+
+    myReviewsTitle: {
+        fontSize: 32,
+        fontWeight: "900",
+        color: "#18181f"
+    },
+
+    myReviewsSubtitle: {
+        marginTop: 6,
+        fontSize: 15,
+        color: "#666666"
+    },
+
+    myReviewCard: {
+        backgroundColor: "#ffffff",
+        borderWidth: 1,
+        borderColor: "#dddddd",
+        borderRadius: 10,
+        padding: 20,
+        marginBottom: 14
+    },
+
+    myReviewCardHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        marginBottom: 14
+    },
+
+    myReviewGameInfo: {
+        flex: 1,
+        paddingRight: 20
+    },
+
+    myReviewGameTitle: {
+        fontSize: 20,
+        fontWeight: "900",
+        color: "#18181f"
+    },
+
+    myReviewDate: {
+        marginTop: 5,
+        fontSize: 12,
+        color: "#777777"
+    },
+
+    myReviewText: {
+        fontSize: 15,
+        lineHeight: 23,
+        color: "#333333"
     },
 });
 
