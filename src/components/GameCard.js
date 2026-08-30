@@ -1,37 +1,49 @@
 import React from "react";
-import {TouchableOpacity,Text} from "react-native";
-import styles from "../styles/style.js";
+import {View,Text,TouchableOpacity} from "react-native";
 import GrateScore from "./GrateScore";
+import styles from "../styles/style";
 
-export default function GameCard({game,navigation}){
+export default function GameCard({
+    game,
+    navigation
+}) {
+    return (
+        <TouchableOpacity
+            style={styles.gameCard}
+            onPress={() =>
+                navigation.navigate(
+                    "GameDetail",
+                    { game }
+                )
+            }
+        >
 
-return (
-    <TouchableOpacity
-        style={styles.gameCard}
-        onPress={()=> navigation.navigate(
-            "GameDetail",
-            {
-                game:game
-            }   
-        )}
-    >
+            <View style={styles.gameCoverPlaceholder}>
+                <Text style={styles.gameCoverLetter}>
+                    {game.title.charAt(0)}
+                </Text>
+            </View>
 
-        <Text style={styles.gameTitle}>
-            {game.title}
-        </Text>
+            <View style={styles.gameCardContent}>
+                <Text
+                    style={styles.gameTitle}
+                    numberOfLines={1}
+                >
+                    {game.title}
+                </Text>
 
-        <Text style={styles.gameInfo}>
-            {game.genre}
-        </Text>
+                <Text style={styles.gameMeta}>
+                    {game.genre}
+                </Text>
 
-        <Text style={styles.gameInfo}>
-            {game.platform}
-        </Text>
+                <Text style={styles.gameMeta}>
+                    {game.platform}
+                </Text>
+            </View>
 
-        <GrateScore
-            score={game.score}
-        />
-
-    </TouchableOpacity>
-);
+            <GrateScore
+                score={game.score}
+            />
+        </TouchableOpacity>
+    );
 }
