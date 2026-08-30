@@ -894,6 +894,113 @@ const styles = StyleSheet.create({
         lineHeight: 23,
         color: "#333333"
     },
+
+    //Report
+    reportReviewButton: {
+        alignSelf: "flex-start",
+        marginTop: 16,
+        paddingVertical: 8,
+        paddingHorizontal: 14,
+        borderWidth: 1,
+        borderColor: "#dc2626",
+        borderRadius: 7
+    },
+
+    reportReviewButtonText: {
+        color: "#dc2626",
+        fontSize: 13,
+        fontWeight: "800"
+    },
+
+    reportModalOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.55)",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20
+    },
+
+    reportModalContainer: {
+        width: "100%",
+        maxWidth: 480,
+        backgroundColor: "#ffffff",
+        borderRadius: 12,
+        padding: 24
+    },
+
+    reportModalTitle: {
+        fontSize: 24,
+        fontWeight: "900",
+        color: "#18181f"
+    },
+
+    reportModalDescription: {
+        marginTop: 6,
+        marginBottom: 18,
+        fontSize: 14,
+        color: "#666666"
+    },
+
+    reportReasonButton: {
+        borderWidth: 1,
+        borderColor: "#dddddd",
+        borderRadius: 8,
+        paddingVertical: 12,
+        paddingHorizontal: 14,
+        marginBottom: 8
+    },
+
+    reportReasonButtonSelected: {
+        borderColor: "#22c55e",
+        backgroundColor: "#f0fdf4"
+    },
+
+    reportReasonText: {
+        fontSize: 14,
+        color: "#333333",
+        fontWeight: "600"
+    },
+
+    reportReasonTextSelected: {
+        color: "#15803d",
+        fontWeight: "800"
+    },
+
+    reportModalActions: {
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        marginTop: 16
+    },
+
+    reportCancelButton: {
+        paddingVertical: 11,
+        paddingHorizontal: 18,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: "#cccccc",
+        marginRight: 10
+    },
+
+    reportCancelButtonText: {
+        color: "#444444",
+        fontWeight: "800"
+    },
+
+    reportSubmitButton: {
+        backgroundColor: "#dc2626",
+        paddingVertical: 11,
+        paddingHorizontal: 18,
+        borderRadius: 8
+    },
+
+    reportSubmitButtonDisabled: {
+        opacity: 0.4
+    },
+
+    reportSubmitButtonText: {
+        color: "#ffffff",
+        fontWeight: "800"
+    },
 });
 
 export default styles;

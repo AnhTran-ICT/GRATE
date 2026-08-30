@@ -1,12 +1,27 @@
-import React, { useCallback, useState } from "react";
-import {View,Text,ScrollView,TouchableOpacity,Alert,Platform} from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
+import React,{useCallback,useState} from "react";
+import {
+    View,
+    Text,
+    ScrollView,
+    TouchableOpacity,
+    Alert,
+    Platform
+} from "react-native";
+import {useFocusEffect} from "@react-navigation/native";
 import Header from "../components/Header";
 import GrateScore from "../components/GrateScore";
 import ReviewForm from "../components/ReviewForm";
 import ReviewCard from "../components/ReviewCard";
 import EditReviewForm from "../components/EditReviewForm";
-import {getCurrentUser,getReviewsForGame,addReview,updateReview,deleteReview} from "../utils/storage";
+import ReportReviewModal from "../components/ReportReviewModal";
+import {
+    getCurrentUser,
+    getReviewsForGame,
+    addReview,
+    updateReview,
+    deleteReview,
+    addReport
+} from "../utils/storage";
 import styles from "../styles/style";
 
 export default function GameDetailScreen({
@@ -15,25 +30,17 @@ export default function GameDetailScreen({
 }) {
     const game = route.params?.game;
 
-    const [currentUser, setCurrentUser] =
-        useState(null);
+    const [currentUser,setCurrentUser] = useState(null);
+    const [reviews,setReviews] = useState([]);
+    const [editingReview,setEditingReview] = useState(null);
+    const [reportingReview,setReportingReview] = useState(null);
 
-    const [reviews, setReviews] =
-        useState([]);
-
-    const [editingReview, setEditingReview] =
-        useState(null);
-
-    function showMessage(title, message) {
+    function showMessage(title,message) {
         if (Platform.OS === "web") {
-            window.alert(
-                `${title}\n\n${message}`
-            );
-        } else {
-            Alert.alert(
-                title,
-                message
-            );
+            window.alert(`${title}\n\n${message}`);
+        }
+        else {
+            Alert.alert(title,message);
         }
     }
 
@@ -46,8 +53,12 @@ export default function GameDetailScreen({
 
                 const user =
                     await getCurrentUser();
+
                 const gameReviews =
-                    await getReviewsForGame(game.id);
+                    await getReviewsForGame(
+                        game.id
+                    );
+
                 setCurrentUser(user);
                 setReviews(gameReviews);
             },
@@ -57,7 +68,7 @@ export default function GameDetailScreen({
     useFocusEffect(
         useCallback(() => {
             loadGameData();
-        }, [loadGameData])
+        },[loadGameData])
     );
 
     if (!game) {
@@ -67,6 +78,7 @@ export default function GameDetailScreen({
                     navigation={navigation}
                     showBack
                 />
+
                 <View style={styles.gameDetailContent}>
                     <Text style={styles.emptyStateTitle}>
                         Game not found
@@ -74,7 +86,10 @@ export default function GameDetailScreen({
 
                     <TouchableOpacity
                         style={styles.primaryButton}
-                        onPress={() =>navigation.navigate("GameCatalogue")
+                        onPress={() =>
+                            navigation.navigate(
+                                "GameCatalogue"
+                            )
                         }
                     >
                         <Text style={styles.primaryButtonText}>
@@ -90,8 +105,7 @@ export default function GameDetailScreen({
         currentUser
             ? reviews.some(
                 review =>
-                    review.userId ===
-                    currentUser.id
+                    review.userId === currentUser.id
             )
             : false;
 
@@ -99,7 +113,7 @@ export default function GameDetailScreen({
         reviews.length > 0
             ? Math.round(
                 reviews.reduce(
-                    (total, review) =>
+                    (total,review) =>
                         total + review.rating,
                     0
                 ) / reviews.length
@@ -110,9 +124,11 @@ export default function GameDetailScreen({
         if (communityScore >= 75) {
             return "Very Grate!";
         }
+
         if (communityScore >= 50) {
             return "Decent";
         }
+
         return "Not Grate";
     }
 
@@ -120,9 +136,11 @@ export default function GameDetailScreen({
         if (communityScore >= 75) {
             return "Highly rated by the GRATE community.";
         }
+
         if (communityScore >= 50) {
             return "Mixed opinions from the GRATE community.";
         }
+
         return "Not recommended by most of the GRATE community.";
     }
 
@@ -135,6 +153,7 @@ export default function GameDetailScreen({
                 "Login Required",
                 "You must be logged in to submit a review."
             );
+
             return false;
         }
 
@@ -147,8 +166,7 @@ export default function GameDetailScreen({
                 currentUser.email,
             rating,
             reviewText,
-            createdAt:
-                new Date().toISOString()
+            createdAt: new Date().toISOString()
         };
 
         const result =
@@ -163,9 +181,12 @@ export default function GameDetailScreen({
                     "You can only submit one review for each game."
                 );
             }
+
             return false;
         }
+
         await loadGameData();
+
         return true;
     }
 
@@ -176,6 +197,7 @@ export default function GameDetailScreen({
         if (!currentUser) {
             return;
         }
+
         const result =
             await updateReview(
                 review.id,
@@ -188,29 +210,52 @@ export default function GameDetailScreen({
                 "Update Failed",
                 "This review could not be updated."
             );
+
             return;
         }
+
         setEditingReview(null);
+
         await loadGameData();
+
         showMessage(
             "Review Updated",
             "Your review has been updated successfully."
         );
     }
 
-    async function handleDeleteReview(review) {
+    async function performDelete(review) {
+        const result =
+            await deleteReview(
+                review.id,
+                currentUser.id
+            );
+
+        if (!result.success) {
+            showMessage(
+                "Delete Failed",
+                "This review could not be deleted."
+            );
+
+            return;
+        }
+
+        setEditingReview(null);
+
+        await loadGameData();
+
+        showMessage(
+            "Review Deleted",
+            "Your review has been deleted successfully."
+        );
+    }
+
+    function handleDeleteReview(review) {
         if (!currentUser) {
             return;
         }
 
-        if (
-            review.userId !==
-            currentUser.id
-        ) {
-            showMessage(
-                "Not Allowed",
-                "You can only delete your own review."
-            );
+        if (review.userId !== currentUser.id) {
             return;
         }
 
@@ -219,10 +264,11 @@ export default function GameDetailScreen({
                 window.confirm(
                     "Are you sure you want to delete this review?"
                 );
-            if (!confirmed) {
-                return;
+
+            if (confirmed) {
+                performDelete(review);
             }
-            await performDelete(review);
+
             return;
         }
 
@@ -244,28 +290,84 @@ export default function GameDetailScreen({
         );
     }
 
-    async function performDelete(review) {
-        const result =
-            await deleteReview(
-                review.id,
-                currentUser.id
+    function handleReportReview(review) {
+        if (!currentUser) {
+            showMessage(
+                "Login Required",
+                "You must be logged in to report a review."
             );
 
-        if (!result.success) {
-            showMessage(
-                "Delete Failed",
-                "This review could not be deleted."
-            );
             return;
         }
 
-        setEditingReview(null);
-        await loadGameData();
+        if (review.userId === currentUser.id) {
+            showMessage(
+                "Not Allowed",
+                "You cannot report your own review."
+            );
+
+            return;
+        }
+
+        setReportingReview(review);
+    }
+
+    async function handleSubmitReport(
+        review,
+        reason
+    ) {
+        if (!currentUser || !review) {
+            return false;
+        }
+
+        if (review.userId === currentUser.id) {
+            showMessage(
+                "Not Allowed",
+                "You cannot report your own review."
+            );
+
+            return false;
+        }
+
+        const newReport = {
+            id: Date.now().toString(),
+            reviewId: review.id,
+            gameId: review.gameId,
+            reporterUserId: currentUser.id,
+            reporterUsername:
+                currentUser.username ||
+                currentUser.email,
+            reportedUserId: review.userId,
+            reportedUsername: review.username,
+            reason,
+            status: "PENDING",
+            createdAt: new Date().toISOString()
+        };
+
+        const result =
+            await addReport(
+                newReport
+            );
+
+        if (!result.success) {
+            if (result.reason === "duplicate") {
+                showMessage(
+                    "Already Reported",
+                    "You already have a pending report for this review."
+                );
+            }
+
+            return false;
+        }
+
+        setReportingReview(null);
 
         showMessage(
-            "Review Deleted",
-            "Your review has been deleted successfully."
+            "Report Submitted",
+            "Your report has been submitted for moderator review."
         );
+
+        return true;
     }
 
     return (
@@ -277,14 +379,10 @@ export default function GameDetailScreen({
 
             <ScrollView
                 style={styles.gameDetailScroll}
-                contentContainerStyle={
-                    styles.gameDetailScrollContent
-                }
+                contentContainerStyle={styles.gameDetailScrollContent}
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.gameDetailContent}>
-
-                    {/* HERO */}
                     <View style={styles.gameHero}>
                         <View style={styles.gameHeroCover}>
                             <Text style={styles.gameHeroLetter}>
@@ -317,16 +415,14 @@ export default function GameDetailScreen({
                         </View>
                     </View>
 
-                    {/* SCORE */}
                     <View style={styles.detailSection}>
                         <Text style={styles.detailSectionLabel}>
                             GRATE SCORE
                         </Text>
 
                         <View style={styles.detailScoreRow}>
-                            <GrateScore
-                                score={communityScore}
-                            />
+                            <GrateScore score={communityScore}/>
+
                             <View style={styles.detailScoreInformation}>
                                 <Text style={styles.detailRatingTitle}>
                                     {getRatingLabel()}
@@ -350,7 +446,6 @@ export default function GameDetailScreen({
                         </View>
                     </View>
 
-                    {/* ABOUT */}
                     <View style={styles.detailSection}>
                         <Text style={styles.detailSectionLabel}>
                             ABOUT THIS GAME
@@ -361,7 +456,6 @@ export default function GameDetailScreen({
                         </Text>
                     </View>
 
-                    {/* INFORMATION */}
                     <View style={styles.detailSection}>
                         <Text style={styles.detailSectionLabel}>
                             GAME INFORMATION
@@ -408,23 +502,17 @@ export default function GameDetailScreen({
                         </View>
                     </View>
 
-                    {/* WRITE REVIEW */}
                     <View style={styles.detailSection}>
                         <Text style={styles.detailSectionLabel}>
                             WRITE A REVIEW
                         </Text>
 
                         <ReviewForm
-                            onSubmit={
-                                handleSubmitReview
-                            }
-                            alreadyReviewed={
-                                alreadyReviewed
-                            }
+                            onSubmit={handleSubmitReview}
+                            alreadyReviewed={alreadyReviewed}
                         />
                     </View>
 
-                    {/* COMMUNITY REVIEWS */}
                     <View style={styles.detailSection}>
                         <View style={styles.communityHeader}>
                             <Text style={styles.detailSectionLabel}>
@@ -447,13 +535,17 @@ export default function GameDetailScreen({
                                 </Text>
                             </View>
                         ) : (
-                            reviews.slice().reverse().map(review => (editingReview && editingReview.id === review.id? (
+                            reviews
+                                .slice()
+                                .reverse()
+                                .map(review => (
+                                    editingReview &&
+                                    editingReview.id === review.id
+                                        ? (
                                             <EditReviewForm
                                                 key={review.id}
                                                 review={review}
-                                                onSave={
-                                                    handleUpdateReview
-                                                }
+                                                onSave={handleUpdateReview}
                                                 onCancel={() =>
                                                     setEditingReview(null)
                                                 }
@@ -463,15 +555,10 @@ export default function GameDetailScreen({
                                             <ReviewCard
                                                 key={review.id}
                                                 review={review}
-                                                currentUser={
-                                                    currentUser
-                                                }
-                                                onEdit={
-                                                    setEditingReview
-                                                }
-                                                onDelete={
-                                                    handleDeleteReview
-                                                }
+                                                currentUser={currentUser}
+                                                onEdit={setEditingReview}
+                                                onDelete={handleDeleteReview}
+                                                onReport={handleReportReview}
                                             />
                                         )
                                 ))
@@ -479,6 +566,15 @@ export default function GameDetailScreen({
                     </View>
                 </View>
             </ScrollView>
+
+            <ReportReviewModal
+                visible={Boolean(reportingReview)}
+                review={reportingReview}
+                onClose={() =>
+                    setReportingReview(null)
+                }
+                onSubmit={handleSubmitReport}
+            />
         </View>
     );
 }
