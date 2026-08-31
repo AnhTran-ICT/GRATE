@@ -310,6 +310,22 @@ export async function getReports() {
     }
 }
 
+export async function getPendingReports() {
+    const reports = await getReports();
+
+    return reports.filter(
+        report => report.status === "PENDING"
+    );
+}
+
+export async function getReviewById(reviewId) {
+    const reviews = await getReviews();
+
+    return reviews.find(
+        review => review.id === reviewId
+    ) || null;
+}
+
 export async function saveReports(reports) {
     try {
         await AsyncStorage.setItem(

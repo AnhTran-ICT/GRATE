@@ -1001,6 +1001,207 @@ const styles = StyleSheet.create({
         color: "#ffffff",
         fontWeight: "800"
     },
+
+    //Moderator Dashboard
+    moderatorScroll: {
+        flex: 1
+    },
+    moderatorScrollContent: {
+        flexGrow: 1,
+        paddingBottom: 50
+    },
+    moderatorContent: {
+        width: "100%",
+        maxWidth: 1000,
+        alignSelf: "center",
+        paddingHorizontal: 20,
+        paddingTop: 30
+    },
+    moderatorHeading: {
+        marginBottom: 24
+    },
+    moderatorTitle: {
+        fontSize: 32,
+        fontWeight: "900",
+        color: "#18181f"
+    },
+    moderatorSubtitle: {
+        marginTop: 6,
+        fontSize: 15,
+        color: "#666666"
+    },
+    moderatorQueueHeader: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 16
+    },
+    moderatorQueueTitle: {
+        fontSize: 20,
+        fontWeight: "900",
+        color: "#18181f"
+    },
+    moderatorCountBadge: {
+        marginLeft: 10,
+        backgroundColor: "#18181f",
+        minWidth: 28,
+        height: 28,
+        borderRadius: 14,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: 8
+    },
+    moderatorCountText: {
+        color: "#ffffff",
+        fontSize: 13,
+        fontWeight: "900"
+    },
+    moderationReportCard: {
+        backgroundColor: "#ffffff",
+        borderWidth: 1,
+        borderColor: "#dddddd",
+        borderRadius: 10,
+        padding: 18,
+        marginBottom: 12
+    },
+    moderationReportHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        marginBottom: 14
+    },
+    moderationReportInfo: {
+        flex: 1,
+        paddingRight: 12
+    },
+    moderationGameTitle: {
+        fontSize: 19,
+        fontWeight: "900",
+        color: "#18181f"
+    },
+    moderationReportedUser: {
+        marginTop: 4,
+        fontSize: 13,
+        color: "#666666"
+    },
+    pendingStatusBadge: {
+        backgroundColor: "#fef3c7",
+        borderRadius: 20,
+        paddingVertical: 6,
+        paddingHorizontal: 12
+    },
+    pendingStatusText: {
+        color: "#92400e",
+        fontSize: 11,
+        fontWeight: "900"
+    },
+    moderationLabel: {
+        marginTop: 4,
+        fontSize: 11,
+        fontWeight: "900",
+        color: "#777777"
+    },
+    moderationValue: {
+        marginTop: 4,
+        fontSize: 15,
+        color: "#333333"
+    },
+    moderationDate: {
+        marginTop: 12,
+        fontSize: 12,
+        color: "#888888"
+    },
+    moderationOpenText: {
+        marginTop: 14,
+        color: "#15803d",
+        fontSize: 13,
+        fontWeight: "900"
+    },
+    reportDetailsCard: {
+        marginTop: 24,
+        backgroundColor: "#ffffff",
+        borderWidth: 1,
+        borderColor: "#cccccc",
+        borderRadius: 12,
+        padding: 22
+    },
+    reportDetailsHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 20
+    },
+    reportDetailsTitle: {
+        fontSize: 24,
+        fontWeight: "900",
+        color: "#18181f"
+    },
+    reportDetailsCloseButton: {
+        paddingVertical: 7,
+        paddingHorizontal: 12,
+        borderWidth: 1,
+        borderColor: "#cccccc",
+        borderRadius: 7
+    },
+    reportDetailsCloseText: {
+        color: "#444444",
+        fontWeight: "800"
+    },
+    reportDetailsRow: {
+        borderBottomWidth: 1,
+        borderBottomColor: "#eeeeee",
+        paddingVertical: 11
+    },
+    reportDetailsLabel: {
+        fontSize: 11,
+        color: "#777777",
+        fontWeight: "900"
+    },
+    reportDetailsValue: {
+        marginTop: 4,
+        fontSize: 15,
+        color: "#222222",
+        fontWeight: "600"
+    },
+    reportReviewSectionTitle: {
+        marginTop: 24,
+        marginBottom: 12,
+        fontSize: 17,
+        fontWeight: "900",
+        color: "#18181f"
+    },
+    reportedReviewBox: {
+        backgroundColor: "#f7f7f7",
+        borderWidth: 1,
+        borderColor: "#dddddd",
+        borderRadius: 9,
+        padding: 16
+    },
+    reportedReviewHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center"
+    },
+    reportedReviewUsername: {
+        fontSize: 15,
+        fontWeight: "900",
+        color: "#18181f"
+    },
+    reportedReviewRating: {
+        fontSize: 16,
+        fontWeight: "900",
+        color: "#15803d"
+    },
+    reportedReviewText: {
+        marginTop: 12,
+        fontSize: 14,
+        lineHeight: 21,
+        color: "#333333"
+    },
+    reportedReviewDate: {
+        marginTop: 12,
+        fontSize: 11,
+        color: "#888888"
+    },
 });
 
 export default styles;
