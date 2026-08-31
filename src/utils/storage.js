@@ -8,23 +8,15 @@ const REPORTS_KEY = "grate_reports";
 
 export async function getUsers() {
     try {
-        const storedUsers =
-            await AsyncStorage.getItem(
-                USERS_KEY
-            );
-
-        let users = storedUsers
-            ? JSON.parse(storedUsers)
-            : [];
+        const storedUsers = await AsyncStorage.getItem(USERS_KEY);
+        let users = storedUsers ? JSON.parse(storedUsers) : [];
 
         defaultUsers.forEach(defaultUser => {
-            const exists =
-                users.some(
-                    user =>
-                        user.email &&
-                        user.email.toLowerCase() ===
-                        defaultUser.email.toLowerCase()
-                );
+            const exists = users.some(
+                user =>
+                    user.email &&
+                    user.email.toLowerCase() === defaultUser.email.toLowerCase()
+            );
 
             if (!exists) {
                 users.push(defaultUser);
@@ -39,11 +31,7 @@ export async function getUsers() {
         return users;
     }
     catch (error) {
-        console.error(
-            "Error loading users:",
-            error
-        );
-
+        console.error("Error loading users:", error);
         return defaultUsers;
     }
 }
@@ -56,10 +44,7 @@ export async function saveUsers(users) {
         );
     }
     catch (error) {
-        console.error(
-            "Error saving users:",
-            error
-        );
+        console.error("Error saving users:", error);
     }
 }
 
@@ -71,19 +56,15 @@ export async function saveCurrentUser(user) {
         );
     }
     catch (error) {
-        console.error(
-            "Error saving current user:",
-            error
-        );
+        console.error("Error saving current user:", error);
     }
 }
 
 export async function getCurrentUser() {
     try {
-        const storedUser =
-            await AsyncStorage.getItem(
-                CURRENT_USER_KEY
-            );
+        const storedUser = await AsyncStorage.getItem(
+            CURRENT_USER_KEY
+        );
 
         if (!storedUser) {
             return null;
@@ -92,11 +73,7 @@ export async function getCurrentUser() {
         return JSON.parse(storedUser);
     }
     catch (error) {
-        console.error(
-            "Error loading current user:",
-            error
-        );
-
+        console.error("Error loading current user:", error);
         return null;
     }
 }
@@ -108,10 +85,7 @@ export async function clearCurrentUser() {
         );
     }
     catch (error) {
-        console.error(
-            "Error clearing current user:",
-            error
-        );
+        console.error("Error clearing current user:", error);
     }
 }
 
@@ -121,10 +95,9 @@ export async function clearCurrentUser() {
 
 export async function getReviews() {
     try {
-        const storedReviews =
-            await AsyncStorage.getItem(
-                REVIEWS_KEY
-            );
+        const storedReviews = await AsyncStorage.getItem(
+            REVIEWS_KEY
+        );
 
         if (!storedReviews) {
             return [];
@@ -133,11 +106,7 @@ export async function getReviews() {
         return JSON.parse(storedReviews);
     }
     catch (error) {
-        console.error(
-            "Error loading reviews:",
-            error
-        );
-
+        console.error("Error loading reviews:", error);
         return [];
     }
 }
@@ -150,43 +119,47 @@ export async function saveReviews(reviews) {
         );
     }
     catch (error) {
-        console.error(
-            "Error saving reviews:",
-            error
-        );
+        console.error("Error saving reviews:", error);
     }
 }
 
 export async function getReviewsForGame(gameId) {
-    const reviews =
-        await getReviews();
+    const reviews = await getReviews();
 
     return reviews.filter(
         review =>
-            review.gameId === gameId
+            review.gameId === gameId &&
+            review.status !== "REMOVED"
     );
 }
 
 export async function getReviewsByUser(userId) {
-    const reviews =
-        await getReviews();
+    const reviews = await getReviews();
 
     return reviews.filter(
         review =>
-            review.userId === userId
+            review.userId === userId &&
+            review.status !== "REMOVED"
     );
 }
 
-export async function addReview(review) {
-    const reviews =
-        await getReviews();
+export async function getReviewById(reviewId) {
+    const reviews = await getReviews();
 
-    const duplicate =
-        reviews.find(
-            existingReview =>
-                existingReview.gameId === review.gameId &&
-                existingReview.userId === review.userId
-        );
+    return reviews.find(
+        review => review.id === reviewId
+    ) || null;
+}
+
+export async function addReview(review) {
+    const reviews = await getReviews();
+
+    const duplicate = reviews.find(
+        existingReview =>
+            existingReview.gameId === review.gameId &&
+            existingReview.userId === review.userId &&
+            existingReview.status !== "REMOVED"
+    );
 
     if (duplicate) {
         return {
@@ -197,12 +170,13 @@ export async function addReview(review) {
 
     const updatedReviews = [
         ...reviews,
-        review
+        {
+            ...review,
+            status: "PUBLISHED"
+        }
     ];
 
-    await saveReviews(
-        updatedReviews
-    );
+    await saveReviews(updatedReviews);
 
     return {
         success: true
@@ -214,15 +188,14 @@ export async function updateReview(
     userId,
     updatedData
 ) {
-    const reviews =
-        await getReviews();
+    const reviews = await getReviews();
 
-    const reviewIndex =
-        reviews.findIndex(
-            review =>
-                review.id === reviewId &&
-                review.userId === userId
-        );
+    const reviewIndex = reviews.findIndex(
+        review =>
+            review.id === reviewId &&
+            review.userId === userId &&
+            review.status !== "REMOVED"
+    );
 
     if (reviewIndex === -1) {
         return {
@@ -238,9 +211,7 @@ export async function updateReview(
         updatedAt: new Date().toISOString()
     };
 
-    await saveReviews(
-        reviews
-    );
+    await saveReviews(reviews);
 
     return {
         success: true
@@ -251,15 +222,13 @@ export async function deleteReview(
     reviewId,
     userId
 ) {
-    const reviews =
-        await getReviews();
+    const reviews = await getReviews();
 
-    const review =
-        reviews.find(
-            existingReview =>
-                existingReview.id === reviewId &&
-                existingReview.userId === userId
-        );
+    const review = reviews.find(
+        existingReview =>
+            existingReview.id === reviewId &&
+            existingReview.userId === userId
+    );
 
     if (!review) {
         return {
@@ -268,31 +237,25 @@ export async function deleteReview(
         };
     }
 
-    const updatedReviews =
-        reviews.filter(
-            existingReview =>
-                existingReview.id !== reviewId
-        );
-
-    await saveReviews(
-        updatedReviews
+    const updatedReviews = reviews.filter(
+        existingReview =>
+            existingReview.id !== reviewId
     );
+
+    await saveReviews(updatedReviews);
 
     return {
         success: true
     };
 }
 
-/* =========================
-   REPORTS
-========================= */
+//Report
 
 export async function getReports() {
     try {
-        const storedReports =
-            await AsyncStorage.getItem(
-                REPORTS_KEY
-            );
+        const storedReports = await AsyncStorage.getItem(
+            REPORTS_KEY
+        );
 
         if (!storedReports) {
             return [];
@@ -301,12 +264,20 @@ export async function getReports() {
         return JSON.parse(storedReports);
     }
     catch (error) {
-        console.error(
-            "Error loading reports:",
-            error
-        );
-
+        console.error("Error loading reports:", error);
         return [];
+    }
+}
+
+export async function saveReports(reports) {
+    try {
+        await AsyncStorage.setItem(
+            REPORTS_KEY,
+            JSON.stringify(reports)
+        );
+    }
+    catch (error) {
+        console.error("Error saving reports:", error);
     }
 }
 
@@ -318,40 +289,15 @@ export async function getPendingReports() {
     );
 }
 
-export async function getReviewById(reviewId) {
-    const reviews = await getReviews();
-
-    return reviews.find(
-        review => review.id === reviewId
-    ) || null;
-}
-
-export async function saveReports(reports) {
-    try {
-        await AsyncStorage.setItem(
-            REPORTS_KEY,
-            JSON.stringify(reports)
-        );
-    }
-    catch (error) {
-        console.error(
-            "Error saving reports:",
-            error
-        );
-    }
-}
-
 export async function addReport(report) {
-    const reports =
-        await getReports();
+    const reports = await getReports();
 
-    const duplicate =
-        reports.find(
-            existingReport =>
-                existingReport.reviewId === report.reviewId &&
-                existingReport.reporterUserId === report.reporterUserId &&
-                existingReport.status === "PENDING"
-        );
+    const duplicate = reports.find(
+        existingReport =>
+            existingReport.reviewId === report.reviewId &&
+            existingReport.reporterUserId === report.reporterUserId &&
+            existingReport.status === "PENDING"
+    );
 
     if (duplicate) {
         return {
@@ -365,9 +311,122 @@ export async function addReport(report) {
         report
     ];
 
-    await saveReports(
-        updatedReports
+    await saveReports(updatedReports);
+
+    return {
+        success: true
+    };
+}
+
+export async function dismissReport(
+    reportId,
+    moderatorId
+) {
+    const currentUser = await getCurrentUser();
+
+    if (
+        !currentUser ||
+        currentUser.id !== moderatorId ||
+        currentUser.role !== "moderator"
+    ) {
+        return {
+            success: false,
+            reason: "unauthorized"
+        };
+    }
+
+    const reports = await getReports();
+
+    const reportIndex = reports.findIndex(
+        report =>
+            report.id === reportId &&
+            report.status === "PENDING"
     );
+
+    if (reportIndex === -1) {
+        return {
+            success: false,
+            reason: "not_found"
+        };
+    }
+
+    reports[reportIndex] = {
+        ...reports[reportIndex],
+        status: "DISMISSED",
+        resolvedBy: moderatorId,
+        resolvedAt: new Date().toISOString()
+    };
+
+    await saveReports(reports);
+
+    return {
+        success: true
+    };
+}
+
+export async function removeReportedReview(
+    reportId,
+    moderatorId
+) {
+    const currentUser = await getCurrentUser();
+
+    if (
+        !currentUser ||
+        currentUser.id !== moderatorId ||
+        currentUser.role !== "moderator"
+    ) {
+        return {
+            success: false,
+            reason: "unauthorized"
+        };
+    }
+
+    const reports = await getReports();
+
+    const reportIndex = reports.findIndex(
+        report =>
+            report.id === reportId &&
+            report.status === "PENDING"
+    );
+
+    if (reportIndex === -1) {
+        return {
+            success: false,
+            reason: "not_found"
+        };
+    }
+
+    const report = reports[reportIndex];
+    const reviews = await getReviews();
+
+    const reviewIndex = reviews.findIndex(
+        review =>
+            review.id === report.reviewId
+    );
+
+    if (reviewIndex === -1) {
+        return {
+            success: false,
+            reason: "review_not_found"
+        };
+    }
+
+    reviews[reviewIndex] = {
+        ...reviews[reviewIndex],
+        status: "REMOVED",
+        removedBy: moderatorId,
+        removedAt: new Date().toISOString()
+    };
+
+    reports[reportIndex] = {
+        ...reports[reportIndex],
+        status: "ACTIONED",
+        resolvedBy: moderatorId,
+        resolvedAt: new Date().toISOString()
+    };
+
+    await saveReviews(reviews);
+    await saveReports(reports);
 
     return {
         success: true

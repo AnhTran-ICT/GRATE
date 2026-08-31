@@ -1202,6 +1202,36 @@ const styles = StyleSheet.create({
         fontSize: 11,
         color: "#888888"
     },
+
+    //Report Dashboard
+    moderationDecisionRow: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginTop: 24
+    },
+    dismissReportButton: {
+        backgroundColor: "#18181f",
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        marginRight: 10,
+        marginBottom: 10
+    },
+    dismissReportButtonText: {
+        color: "#ffffff",
+        fontWeight: "900"
+    },
+    removeReportedReviewButton: {
+        backgroundColor: "#dc2626",
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        marginBottom: 10
+    },
+    removeReportedReviewButtonText: {
+        color: "#ffffff",
+        fontWeight: "900"
+    },
 });
 
 export default styles;
