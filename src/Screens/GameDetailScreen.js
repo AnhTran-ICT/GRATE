@@ -126,7 +126,7 @@ export default function GameDetailScreen({
         }
 
         if (communityScore >= 50) {
-            return "Decent";
+            return "AveGrate";
         }
 
         return "Not Grate";

@@ -1,40 +1,30 @@
-import React, {useMemo,useState} from "react";
-import {View,Text,FlatList,ScrollView,TouchableOpacity} from "react-native";
-import games, {platforms,genres} from "../data/games";
+import React,{useMemo,useState} from "react";
+import {
+    View,
+    Text,
+    FlatList,
+    ScrollView,
+    TouchableOpacity
+} from "react-native";
+import games,{platforms,genres} from "../data/games";
 import Header from "../components/Header";
 import GameCard from "../components/GameCard";
 import SearchBar from "../components/SearchBar";
 import FilterChip from "../components/FilterChip";
 import styles from "../styles/style";
 
-export default function GameCatalogueScreen({
-    navigation
-}) {
-    const [searchText, setSearchText] =
-        useState("");
-
-    const [
-        selectedPlatform,
-        setSelectedPlatform
-    ] = useState("All");
-
-    const [
-        selectedGenre,
-        setSelectedGenre
-    ] = useState("All");
+export default function GameCatalogueScreen({navigation}) {
+    const [searchText,setSearchText] = useState("");
+    const [selectedPlatform,setSelectedPlatform] = useState("All");
+    const [selectedGenre,setSelectedGenre] = useState("All");
 
     const filteredGames = useMemo(() => {
-        const search =
-            searchText
-                .trim()
-                .toLowerCase();
+        const search = searchText.trim().toLowerCase();
 
         return games.filter(game => {
             const matchesSearch =
                 search === "" ||
-                game.title
-                    .toLowerCase()
-                    .includes(search);
+                game.title.toLowerCase().includes(search);
 
             const matchesPlatform =
                 selectedPlatform === "All" ||
@@ -50,20 +40,17 @@ export default function GameCatalogueScreen({
                 matchesPlatform &&
                 matchesGenre
             );
-
         });
-    }, [
+    },[
         searchText,
         selectedPlatform,
         selectedGenre
     ]);
 
     function clearFilters() {
-
         setSearchText("");
         setSelectedPlatform("All");
         setSelectedGenre("All");
-
     }
 
     const filtersActive =
@@ -77,74 +64,77 @@ export default function GameCatalogueScreen({
                 navigation={navigation}
                 showBack
             />
-
             <View style={styles.catalogueContent}>
                 <Text style={styles.catalogueTitle}>
-                    Browse Games
+                    Game Catalogue
                 </Text>
-
-                <SearchBar
-                    value={searchText}
-                    onChangeText={setSearchText}
-                    onClear={() =>
-                        setSearchText("")
-                    }
-                />
-
-                <Text style={styles.filterLabel}>
-                    PLATFORM
+                <Text style={styles.catalogueSubtitle}>
+                    Search and discover games rated by the GRATE community.
                 </Text>
-
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.filterScroll}
-                    contentContainerStyle={styles.filterRow}
-                >
-
-                    {platforms.map(platform => (
-                        <FilterChip
-                            key={platform}
-                            label={
-                                platform === "Nintendo Switch"
-                                    ? "Switch"
-                                    : platform
-                            }
-                            selected={
-                                selectedPlatform === platform
-                            }
-                            onPress={() =>
-                                setSelectedPlatform(platform)
-                            }
+                <View style={styles.catalogueSearchSection}>
+                    <View style={styles.catalogueFilterBlock}>
+                        <Text style={styles.filterLabel}>
+                            Search
+                        </Text>
+                        <SearchBar
+                            value={searchText}
+                            onChangeText={setSearchText}
+                            onClear={() => setSearchText("")}
                         />
-                    ))}
-                </ScrollView>
-
-                <Text style={styles.filterLabel}>
-                    GENRE
-                </Text>
-
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.filterScroll}
-                    contentContainerStyle={styles.filterRow}
-                >
-
-                    {genres.map(genre => (
-                        <FilterChip
-                            key={genre}
-                            label={genre}
-                            selected={
-                                selectedGenre === genre
-                            }
-                            onPress={() =>
-                                setSelectedGenre(genre)
-                            }
-                        />
-                    ))}
-                </ScrollView>
-
+                    </View>
+                    <View style={styles.catalogueFilterBlock}>
+                        <Text style={styles.filterLabel}>
+                            Platform
+                        </Text>
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            style={styles.filterScroll}
+                            contentContainerStyle={styles.filterRow}
+                        >
+                            {platforms.map(platform => (
+                                <FilterChip
+                                    key={platform}
+                                    label={
+                                        platform === "Nintendo Switch"
+                                            ? "Switch"
+                                            : platform
+                                    }
+                                    selected={
+                                        selectedPlatform === platform
+                                    }
+                                    onPress={() =>
+                                        setSelectedPlatform(platform)
+                                    }
+                                />
+                            ))}
+                        </ScrollView>
+                    </View>
+                    <View style={styles.catalogueFilterBlock}>
+                        <Text style={styles.filterLabel}>
+                            Genre
+                        </Text>
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            style={styles.filterScroll}
+                            contentContainerStyle={styles.filterRow}
+                        >
+                            {genres.map(genre => (
+                                <FilterChip
+                                    key={genre}
+                                    label={genre}
+                                    selected={
+                                        selectedGenre === genre
+                                    }
+                                    onPress={() =>
+                                        setSelectedGenre(genre)
+                                    }
+                                />
+                            ))}
+                        </ScrollView>
+                    </View>
+                </View>
                 <View style={styles.resultHeader}>
                     <Text style={styles.resultCount}>
                         {filteredGames.length}
@@ -152,25 +142,19 @@ export default function GameCatalogueScreen({
                         {filteredGames.length === 1
                             ? "game"
                             : "games"}
-                        {" "}found
                     </Text>
-
                     {filtersActive && (
-                        <TouchableOpacity
-                            onPress={clearFilters}
-                        >
+                        <TouchableOpacity onPress={clearFilters}>
                             <Text style={styles.clearFilters}>
                                 Clear filters
                             </Text>
                         </TouchableOpacity>
                     )}
                 </View>
-
                 <FlatList
                     data={filteredGames}
                     keyExtractor={item => item.id}
-                    renderItem={({ item }) => (
-
+                    renderItem={({item}) => (
                         <GameCard
                             game={item}
                             navigation={navigation}
@@ -179,12 +163,10 @@ export default function GameCatalogueScreen({
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={styles.gameList}
                     ListEmptyComponent={
-
                         <View style={styles.emptyState}>
                             <Text style={styles.emptyStateTitle}>
                                 No games found
                             </Text>
-
                             <Text style={styles.emptyStateText}>
                                 Try changing your search or filters.
                             </Text>

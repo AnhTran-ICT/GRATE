@@ -14,7 +14,7 @@ export default function MyReviewCard({
             return "Very Grate!";
         }
         else if (review.rating >= 50) {
-            return "Decent";
+            return "AveGrate";
         }
         return "Not Grate";
     }

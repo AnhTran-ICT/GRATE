@@ -23,7 +23,7 @@ export default function ReviewCard({
         }
 
         if (review.rating >= 50) {
-            return "Decent";
+            return "AveGrate";
         }
 
         return "Not Grate";
